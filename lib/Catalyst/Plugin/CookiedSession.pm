@@ -7,7 +7,7 @@ use JSON::XS::VersionOneAndTwo;
 use MIME::Base64;
 use NEXT;
 use base qw/Class::Accessor::Fast/;
-our $VERSION = '0.34';
+our $VERSION = '0.35';
 
 BEGIN {
     __PACKAGE__->mk_accessors(

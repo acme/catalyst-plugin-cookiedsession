@@ -1,6 +1,6 @@
 CHANGES file for Catalyst::Plugin::CookiedSession:
 
-0.35
+0.35 Wed Aug 19 11:43:10 BST 2009
   - add ability to change the cookie name
 
 0.34 Wed Sep 10 20:41:10 BST 2008
