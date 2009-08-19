@@ -30,7 +30,8 @@ sub prepare_cookies {
     my $expires = $configuration->{expires};
     $c->_cookiedsession_expires($expires);
 
-    my $name = Catalyst::Utils::appprefix( ref($c) ) . '_cookiedsession';
+    my $name = $configuration->{name}
+        || Catalyst::Utils::appprefix( ref($c) ) . '_cookiedsession';
     $c->_cookiedsession_name($name);
 
     my $cookie  = $c->request->cookie($name);
@@ -122,6 +123,10 @@ If you do not set an expires value in the configuration, then a session
 cookie is used. You should set a value to make the cookie persist through
 closing the browser: use '+1h' for one hour, '+2d' for two days, '+3M'
 for three months and '+4y' for four years.
+
+The cookied is named after your application, with _cookiedsession
+appended to the end. Pass in a name value in the configuration to
+override this.
 
 Note that the cookie is limited in size to 4096 bytes. Keep your sessions
 very small. Alternatively please provide a patch which works along the

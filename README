@@ -4,16 +4,16 @@ NAME
 SYNOPSIS
       # in your Catalyst application:
       use Catalyst qw(CookiedSession);
-  
-      __PACKAGE__->config(
+      
+  __PACKAGE__->config(
           cookiedsession => { key => 'secretkey', expires => '+1d' },
       );
-  
-      # later on in your code
+      
+  # later on in your code
       $c->session->{product} = 'foo';
       ...
       my $product = $c->session->{product};
-  
+
 DESCRIPTION
     This module is a replacement module for Catalyst::Plugin::Session::*
     which stores the Catalyst session in a browser cookie. This has two
@@ -30,6 +30,10 @@ DESCRIPTION
     through closing the browser: use '+1h' for one hour, '+2d' for two days,
     '+3M' for three months and '+4y' for four years.
 
+    The cookied is named after your application, with _cookiedsession
+    appended to the end. Pass in a name value in the configuration to
+    override this.
+
     Note that the cookie is limited in size to 4096 bytes. Keep your
     sessions very small. Alternatively please provide a patch which works
     along the lines of CGI::Cookie::Splitter.
@@ -40,6 +44,7 @@ AUTHOR
 COPYRIGHT
     Copyright (C) 2008, Leon Brocard
 
+LICENSE
     This module is free software; you can redistribute it or modify it under
     the same terms as Perl itself.
 
