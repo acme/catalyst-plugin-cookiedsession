@@ -5,7 +5,7 @@ use Catalyst::Exception;
 use Crypt::CBC;
 use JSON::XS::VersionOneAndTwo;
 use MIME::Base64;
-use NEXT;
+use Class::C3::Adopt::NEXT;
 use base qw/Class::Accessor::Fast/;
 our $VERSION = '0.35';
 
@@ -17,7 +17,7 @@ BEGIN {
 
 sub prepare_cookies {
     my $c = shift;
-    $c->NEXT::prepare_cookies(@_);
+    $c->maybe::next::method(@_);
 
     my $configuration = $c->config->{cookiedsession} || {};
 
@@ -63,7 +63,7 @@ sub finalize_cookies {
     };
     $c->log->debug("CookiedSession: set cookie $name containing $json")
         if $c->debug;
-    $c->NEXT::finalize_cookies(@_);
+    $c->maybe::next::method(@_);
 }
 
 sub _cookiedsession_throw_error {
