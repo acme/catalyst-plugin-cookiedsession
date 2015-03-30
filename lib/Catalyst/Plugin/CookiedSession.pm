@@ -5,19 +5,19 @@ use Catalyst::Exception;
 use Crypt::CBC;
 use JSON::XS::VersionOneAndTwo;
 use MIME::Base64;
-use NEXT;
+use Class::C3::Adopt::NEXT;
 use base qw/Class::Accessor::Fast/;
 our $VERSION = '0.35';
 
 BEGIN {
     __PACKAGE__->mk_accessors(
-        qw(_cookiedsession_key _cookiedsession_expires _cookiedsession_name _cookiedsession_session)
+        qw(_cookiedsession_key _cookiedsession_secure _cookiedsession_httponly _cookiedsession_expires _cookiedsession_name _cookiedsession_session)
     );
 }
 
 sub prepare_cookies {
     my $c = shift;
-    $c->NEXT::prepare_cookies(@_);
+    $c->maybe::next::method(@_);
 
     my $configuration = $c->config->{cookiedsession} || {};
 
@@ -29,6 +29,12 @@ sub prepare_cookies {
 
     my $expires = $configuration->{expires};
     $c->_cookiedsession_expires($expires);
+
+    my $secure = $configuration->{secure};
+    $c->_cookiedsession_secure($secure);
+
+    my $httponly = $configuration->{httponly};
+    $c->_cookiedsession_httponly($httponly);
 
     my $name = $configuration->{name}
         || Catalyst::Utils::appprefix( ref($c) ) . '_cookiedsession';
@@ -57,13 +63,16 @@ sub finalize_cookies {
     my $ciphertext        = $c->_cookiedsession_cipher->encrypt($json);
     my $ciphertext_base64 = encode_base64( $ciphertext, '' );
     my $name              = $c->_cookiedsession_name;
+    # Creates CGI::Simple::Cookie object
     $c->response->cookies->{$name} = {
-        value   => $ciphertext_base64,
-        expires => $c->_cookiedsession_expires
+        value    => $ciphertext_base64,
+        expires  => $c->_cookiedsession_expires,
+        secure   => $c->_cookiedsession_secure,
+        httponly => $c->_cookiedsession_httponly,
     };
     $c->log->debug("CookiedSession: set cookie $name containing $json")
         if $c->debug;
-    $c->NEXT::finalize_cookies(@_);
+    $c->maybe::next::method(@_);
 }
 
 sub _cookiedsession_throw_error {
